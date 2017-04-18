@@ -2,28 +2,42 @@ import kivy
 kivy.require('1.9.1')
 
 from kivy.app import App
-from kivy.uix.gridlayout import GridLayout
-from kivy.uix.label import Label
-from kivy.uix.textinput import TextInput
+from kivy.uix.button import Label
+from kivy.uix.stacklayout import StackLayout
+from kivy.uix.behaviors.emacs import EmacsBehavior
+from kivy.uix.popup import Popup
+from kivy.uix.screenmanager import ScreenManager, Screen
+from pymongo import MongoClient
+import os
+class homeAction(StackLayout):
+    
+    def loginFunction(self, username, password):
+        if username and password:
+            try:
+                client = MongoClient()
+                db = client['remindersNote']
+                cursor = db.users.find({"username" : username}).count()
+                if cursor > 0:
+                    popup = Popup(title='Message', content=Label(text=username + " " + password), size_hint=(None, None), size=(200, 80))
+                else:
+                    popup = Popup(title='Message', content=Label(text="Incorrect Input"), size_hint=(None, None), size=(200, 80))
+                popup.open()
+            except Exception:
+                self.display.text = "Error Input"
+        else:
+                self.display.text = "Required Field"
 
-class LoginScreen(GridLayout):
+    def registerApp(self):
+        os.system("python register.py")
 
-    def __init__(self, **kwargs):
-        super(LoginScreen, self).__init__(**kwargs)
-        self.cols = 2
-        self.add_widget(Label(text='User Name'))
-        self.username = TextInput(multiline=False)
-        self.add_widget(self.username)
-        self.add_widget(Label(text='password'))
-        self.password = TextInput(password=True, multiline=False)
-        self.add_widget(self.password)
+    def forgotApp(self):
+        os.system("python forgotpass.py")
 
-
-class MyApp(App):
+class homeLog(App):
 
     def build(self):
-        return LoginScreen()
+        return homeAction()
 
+homelog = homeLog()
 
-if __name__ == '__main__':
-    MyApp().run()
+homelog.run()
