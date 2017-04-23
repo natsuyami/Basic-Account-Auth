@@ -19,7 +19,7 @@ class homeAction(StackLayout):
                 if cursor > 0:
                     dataUser = db.users.find({"username" : username, "password" : password}).count()
                     if dataUser > 0:
-                        os.system("python homeUser.py")
+                        popup = Popup(title='Message', content=Label(text="Account Authenticate"), size_hint=(None, None), size=(200, 80))
                     else:
                         popup = Popup(title='Message', content=Label(text="Incorrect Password"), size_hint=(None, None), size=(200, 80))
                 else:

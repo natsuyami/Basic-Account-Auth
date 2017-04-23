@@ -49,6 +49,8 @@ class registerAccount(StackLayout):
 		else:
 			self.display.text = "Required Field"
 
+	def backHome(self):
+		quit()
 
 class registerLog(App):
 	
